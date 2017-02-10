@@ -9,6 +9,7 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON)
 set( QAnnotationTest_SRCS
 	AnnotateClassOne.cpp
 	QAnnotationTest.cpp)
+include_directories( ${PROJECT_SOURCE_DIR}/src )
 
 add_executable( QAnnotationTest ${QAnnotationTest_SRCS})
 target_link_libraries( QAnnotationTest QEAnnotation Qt5::Core Qt5::Test ${CONAN_LIBS})

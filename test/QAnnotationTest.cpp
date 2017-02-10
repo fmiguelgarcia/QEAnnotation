@@ -1,7 +1,7 @@
 #include "QAnnotationTest.hpp"
 #include "AnnotateClassOne.hpp"
-#include "../src/QEAnnotationModel.hpp"
-#include "../src/QEAnnotation.hpp"
+#include "QEAnnotationModel.hpp"
+#include "QEAnnotation.hpp"
 #include <QTest>
 
 void TestQAnnotation::QAnnotationModel_annotation()
