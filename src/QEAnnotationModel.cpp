@@ -16,8 +16,8 @@ namespace {
 	QString annotateAssignExpression()
 	{
 		const QLatin1Literal keyExp("(?<key>\\@(\\w(\\w|\\.)+))");
-		const QLatin1Literal valueOneWordExp("(?<valueOneWord>(\\w+))");
-		const QLatin1Literal valueMuliWordsExp( "(\\'(?<valueMultiWords>(\\w|\\s)+)\\')");
+		const QLatin1Literal valueOneWordExp("(?<valueOneWord>((\\w|/)+))");
+		const QLatin1Literal valueMuliWordsExp( "(\\'(?<valueMultiWords>((\\w|\\s|/)+))\\')");
 
 		const QString assignExp = QString("%1\\s*=\\s*(%2|%3)")
 			.arg( keyExp)

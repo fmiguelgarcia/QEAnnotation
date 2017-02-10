@@ -18,7 +18,10 @@ class AnnotateClassOne : public QObject
 	Q_CLASSINFO( "description", "@json.property.name=desc")
 	Q_CLASSINFO( "realValue",  "@json.property.enable=false")
 
+	Q_CLASSINFO( "add", "@webmvc.requestMapping=x/xx/value")
+	
 	public:
+		Q_INVOKABLE double add( double a, double b) const;
 		
 	private:
 		int m_id;
