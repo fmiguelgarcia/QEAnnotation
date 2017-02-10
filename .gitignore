@@ -1,0 +1,5 @@
+build
+.*.swp
+conan/test_package/build
+*.pyc
+*.kdev4

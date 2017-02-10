@@ -1,0 +1,5 @@
+[requires]
+QECommon/0.1.0@fmiguelgarcia/stable
+
+[generators]
+cmake
