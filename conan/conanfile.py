@@ -15,6 +15,7 @@ class QEAnnotationConan(ConanFile):
 
     def build(self):
         cmake = CMake( self.settings)
+        self.run( "conan install %s/QEAnnotation" % self.conanfile_directory)
         self.run( "cmake %s/QEAnnotation %s" % (self.conanfile_directory, cmake.command_line))
         self.run( "cmake --build . %s" % cmake.build_config)
 

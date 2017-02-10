@@ -1,3 +1,5 @@
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 find_package( Qt5Core)
 find_package( Qt5Test)
 set( CMAKE_AUTOMOC ON)
