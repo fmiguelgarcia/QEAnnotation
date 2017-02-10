@@ -11,7 +11,7 @@ set( QAnnotationTest_SRCS
 	QAnnotationTest.cpp)
 
 add_executable( QAnnotationTest ${QAnnotationTest_SRCS})
-target_link_libraries( QAnnotationTest QEAnnotation Qt5::Core Qt5::Test)
+target_link_libraries( QAnnotationTest QEAnnotation Qt5::Core Qt5::Test ${CONAN_LIBS})
 set_target_properties( QAnnotationTest PROPERTIES CXX_STANDARD 11)
 
 add_test( NAME QEAnnotationTest COMMAND  $<TARGET_FILE:QAnnotationTest>)
