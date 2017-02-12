@@ -9,6 +9,7 @@ class QEAnnotationConan(ConanFile):
     requires = "QECommon/0.1.0@fmiguelgarcia/stable"
     settings = "os", "compiler", "build_type", "arch"
     license = "https://www.gnu.org/licenses/lgpl-3.0-standalone.html"
+    generators = "cmake"
 
     def source(self):
         self.run("git clone ssh://miguel@migroslinx.no-ip.org/home/miguel/git/QE/QEAnnotation") 
