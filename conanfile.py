@@ -1,6 +1,5 @@
 from conans import ConanFile, CMake 
 import os
-import multiprocessing
 import inspect
 
 class QEAnnotationConan(ConanFile):
@@ -10,15 +9,17 @@ class QEAnnotationConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     license = "https://www.gnu.org/licenses/lgpl-3.0-standalone.html"
     generators = "cmake"
+    url = "ssh://miguel@migroslinx.no-ip.org/home/miguel/git/QE/QEAnnotation"
+    description = "Annotation library in Qt Enterprise"
 
     def source(self):
-        self.run("git clone ssh://miguel@migroslinx.no-ip.org/home/miguel/git/QE/QEAnnotation") 
+        self.run("git clone %s" % self.url) 
 
     def build(self):
         cmake = CMake( self.settings)
         self.run( "conan install %s/QEAnnotation" % self.conanfile_directory)
         self.run( "cmake %s/QEAnnotation %s" % (self.conanfile_directory, cmake.command_line))
-        self.run( "cmake --build . %s" % cmake.build_config)
+        self.run( "cmake --build . %s" % cmake.build_config )
 
     def package(self):
         self.copy( pattern="*.hpp", dst="include/QEAnnotation/", src="QEAnnotation/src")
