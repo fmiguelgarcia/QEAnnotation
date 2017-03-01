@@ -9,7 +9,7 @@ class QEAnnotationConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     license = "https://www.gnu.org/licenses/lgpl-3.0-standalone.html"
     generators = "cmake"
-    url = "ssh://miguel@migroslinx.no-ip.org/home/miguel/git/QE/QEAnnotation"
+    url = "https://github.com/fmiguelgarcia/QEAnnotation.git"
     description = "Annotation library in Qt Enterprise"
 
     def source(self):
