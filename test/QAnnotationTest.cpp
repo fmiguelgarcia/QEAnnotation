@@ -19,8 +19,11 @@ void TestQAnnotation::QAnnotationModel_annotation()
 	QVERIFY( annModel.annotation( "description", "@_unvalid_annotation").value().isNull());
 	QVERIFY( annModel.annotation( "invalid_description", "@annotation").value().isNull());
 	
-	QVERIFY( annModel.annotation( "add",
+	QVERIFY( annModel.annotation( "add", 
 		"@webmvc.requestMapping").value().toString() == "x/xx/value");
+
+	QVERIFY( annModel.annotation( "testColon", "@w.class")
+			.value().toString() == "std::mutex");
 }
 
 

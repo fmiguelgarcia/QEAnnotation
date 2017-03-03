@@ -19,6 +19,7 @@ class AnnotateClassOne : public QObject
 	Q_CLASSINFO( "realValue",  "@json.property.enable=false")
 
 	Q_CLASSINFO( "add", "@webmvc.requestMapping=x/xx/value")
+	Q_CLASSINFO( "testColon", "@w.class=std::mutex")
 	
 	public:
 		Q_INVOKABLE double add( double a, double b) const;
