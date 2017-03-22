@@ -97,10 +97,10 @@ namespace qe { namespace annotation {
 			/// key. 
 			/// @param classInfoId Q_CLASSINFO name use to store annotation.
 			/// @param key
-			Item annotation( const QString classInfoId, const QString key) const;
+			Item annotation( const QString &classInfoId, const QString &key) const;
 
 			/// @brief It gets all annotations for a specific classInfoId.
-			ItemList annotations( const QString classInfoId) const;
+			ItemList annotations( const QString &classInfoId) const;
 
 			/// @brief It gets all annotations for this model.
 			ItemByClassInfoId annotations() const;
@@ -110,7 +110,7 @@ namespace qe { namespace annotation {
 			void parseMetaObject( const QMetaObject* meta);
 
 			/// @brief It parses annotations found in @p annotations string.
-			ItemList parseAnnotationsInClassInfo(const QString annotations) const;
+			ItemList parseAnnotationsInClassInfo(const QString &annotations) const;
 
 		private:
 			QSharedDataPointer<ModelPrivate> d_ptr;

@@ -37,8 +37,8 @@ namespace qe { namespace annotation {
 		public:
 			/// @brief Constructor.
 			explicit Item(
-					QString key = QString(),
-					QVariant value = QVariant()) noexcept;
+					const QString & key = QString(),
+					const QVariant & value = QVariant()) noexcept;
 
 			/// @brief Move constructor.
 			Item( Item &&other) noexcept;
@@ -62,13 +62,13 @@ namespace qe { namespace annotation {
 			bool isValid() const noexcept;
 
 			/// @brief It gets the key of this annotation.
-			QString key() const noexcept;
+			const QString & key() const noexcept;
 
 			/// @brief It returns the value of this annotation. 
 			/// If value is null, it will return @p defaultValue instead.
 			/// @param defaultValue Value that will be returned if internal value is
 			/// null
-			QVariant value( const QVariant defaultValue = QVariant()) const noexcept;
+			QVariant value( const QVariant &defaultValue = QVariant()) const noexcept;
 
 		private:
 			QString m_key;			///< Key

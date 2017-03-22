@@ -92,7 +92,7 @@ void Model::parseMetaObject( const QMetaObject* meta)
 	}
 }
 
-ItemList Model::parseAnnotationsInClassInfo(const QString annotations) const
+ItemList Model::parseAnnotationsInClassInfo(const QString &annotations) const
 {
 	ItemList annotationItems;
 
@@ -115,7 +115,7 @@ ItemList Model::parseAnnotationsInClassInfo(const QString annotations) const
 ItemByClassInfoId Model::annotations() const
 { return d_ptr->m_annotationsByClassInfoId; }
 
-ItemList Model::annotations(const QString classInfoId) const
+ItemList Model::annotations(const QString &classInfoId) const
 {
 	ItemList itemList;
 
@@ -126,7 +126,7 @@ ItemList Model::annotations(const QString classInfoId) const
 	return itemList;
 }
 
-Item Model::annotation(const QString classInfoId, const QString key) const
+Item Model::annotation(const QString &classInfoId, const QString &key) const
 {
 	Item item;
 	ItemList itemList = annotations( classInfoId);

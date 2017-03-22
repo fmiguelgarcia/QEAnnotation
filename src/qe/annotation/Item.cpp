@@ -29,8 +29,8 @@
 using namespace qe::annotation;
 using namespace std;
 
-Item::Item( QString key, QVariant value) noexcept
-  : m_key(move(key)), m_value(move(value))
+Item::Item( const QString &key, const QVariant &value) noexcept
+  : m_key(key), m_value(value)
 {}
 
 Item::Item( Item &&other) noexcept
@@ -59,10 +59,10 @@ bool Item::operator<(const Item &other) const noexcept
 bool Item::isValid() const noexcept
 { return ! m_key.isEmpty(); }
 
-QString Item::key() const noexcept
+const QString & Item::key() const noexcept
 { return m_key; }
 
-QVariant Item::value( const QVariant defaultValue ) const noexcept
+QVariant Item::value( const QVariant & defaultValue ) const noexcept
 {
 	if (m_value.isNull())
 		return defaultValue;
