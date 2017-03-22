@@ -24,40 +24,26 @@
  *
  * $QE_END_LICENSE$
  */
-#include "QEAnnotationItem.hpp"
 
-QE_USE_NAMESPACE
+#include "Annotation.hpp"
+
+using namespace qe::annotation;
 using namespace std;
 
-QEAnnotationItem::QEAnnotationItem( QString key, QVariant value) noexcept
-  : m_key(move(key)), m_value(move(value))
-{}
+Annotation::AnnotationCacheByName Annotation::m_registeredModels;
 
-QEAnnotationItem::QEAnnotationItem( QEAnnotationItem &&other) noexcept
-  : m_key( move(other.m_key)), m_value( move(other.m_value))
-{}
-
-QEAnnotationItem::QEAnnotationItem(const QEAnnotationItem &other) noexcept
-  : m_key(other.m_key), m_value(other.m_value)
-{}
-
-QEAnnotationItem &QEAnnotationItem::operator=(const QEAnnotationItem &other) = default;
-
-bool QEAnnotationItem::operator==(const QEAnnotationItem &other) const noexcept
-{ return m_key == other.m_key; }
-
-bool QEAnnotationItem::operator<(const QEAnnotationItem &other) const noexcept
-{ return m_key < other.m_key; }
-
-bool QEAnnotationItem::isValid() const noexcept
-{ return ! m_key.isEmpty(); }
-
-QString QEAnnotationItem::key() const noexcept
-{ return m_key; }
-
-QVariant QEAnnotationItem::value( const QVariant defaultValue ) const noexcept
+Model Annotation::registerModel(const QMetaObject *meta)
 {
-	if (m_value.isNull())
-		return defaultValue;
-	return m_value;
+	Model model(nullptr);
+	if (meta)
+	{
+		const QByteArray name = meta->className();
+		auto itr = m_registeredModels.find( name);
+		if (itr == end(m_registeredModels))
+			itr = m_registeredModels.insert(
+				make_pair (name, Model(meta))).first;
+		model = itr->second;
+	}
+
+	return model;
 }

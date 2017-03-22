@@ -24,26 +24,47 @@
  *
  * $QE_END_LICENSE$
  */
+#include "Item.hpp"
 
-#include "QEAnnotation.hpp"
-
-QE_USE_NAMESPACE
+using namespace qe::annotation;
 using namespace std;
 
-QEAnnotation::AnnotationCacheByName QEAnnotation::m_registeredModels;
+Item::Item( QString key, QVariant value) noexcept
+  : m_key(move(key)), m_value(move(value))
+{}
 
-QEAnnotationModel QEAnnotation::registerModel(const QMetaObject *meta)
+Item::Item( Item &&other) noexcept
+  : m_key( move(other.m_key)), m_value( move(other.m_value))
+{}
+
+Item::Item(const Item &other) noexcept
+  : m_key(other.m_key), m_value(other.m_value)
+{}
+
+Item &Item::operator=(const Item &other) = default;
+
+Item &Item::operator=(Item &&other)
 {
-	QEAnnotationModel annModel(nullptr);
-	if (meta)
-	{
-		const QByteArray name = meta->className();
-		auto itr = m_registeredModels.find( name);
-		if (itr == end(m_registeredModels))
-			itr = m_registeredModels.insert(
-				make_pair (name, QEAnnotationModel(meta))).first;
-		annModel = itr->second;
-	}
+	m_key = std::move( other.m_key);
+	m_value = std::move( other.m_value);
+	return *this;
+}
 
-	return annModel;
+bool Item::operator==(const Item &other) const noexcept
+{ return m_key == other.m_key; }
+
+bool Item::operator<(const Item &other) const noexcept
+{ return m_key < other.m_key; }
+
+bool Item::isValid() const noexcept
+{ return ! m_key.isEmpty(); }
+
+QString Item::key() const noexcept
+{ return m_key; }
+
+QVariant Item::value( const QVariant defaultValue ) const noexcept
+{
+	if (m_value.isNull())
+		return defaultValue;
+	return m_value;
 }

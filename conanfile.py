@@ -1,6 +1,6 @@
 from conans import ConanFile, CMake 
-import os
-import inspect
+from conans.tools import os_info
+import multiprocessing
 
 class QEAnnotationConan(ConanFile):
     name = "QEAnnotation"
@@ -11,20 +11,20 @@ class QEAnnotationConan(ConanFile):
     generators = "cmake"
     url = "https://github.com/fmiguelgarcia/QEAnnotation.git"
     description = "Annotation library in Qt Enterprise"
-
-    def source(self):
-        self.run("git clone %s" % self.url) 
+    exports_sources = ["src/*", "test/*", "tools/*", "CMakeLists.txt"]
 
     def build(self):
         cmake = CMake( self.settings)
-        self.run( "cmake %s/QEAnnotation %s" % (self.conanfile_directory, cmake.command_line))
-        self.run( "cmake --build . %s" % cmake.build_config )
+        self.run( "cmake %s %s" % (self.conanfile_directory, cmake.command_line))
+        self.run( "cmake --build . %s %s" % (cmake.build_config, 
+            ("-- -j %d " % multiprocessing.cpu_count()) if os_info.is_linux else ""))
 
     def package(self):
-        self.copy( pattern="*.hpp", dst="include/QEAnnotation/", src="QEAnnotation/src")
-        self.copy( pattern="LICENSE.LGPLv3", dst="share/QEAnnotation")
-        self.copy( pattern="libQEAnnotation.so*", dst="lib", src="src")
+        self.copy( pattern="*.hpp", dst="include/qe/annotation/",
+                src="src/qe/annotation")
+        self.copy( pattern="LICENSE.LGPLv3", dst="share/qe/annotation")
+        self.copy( pattern="libQEAnnotation.so*", dst="lib",
+                src="src/qe/annotation", links=True)
 
     def package_info(self):
         self.cpp_info.libs.extend(["QEAnnotation"])
-        self.cpp_info.includedirs.extend(["include/QEAnnotation"])

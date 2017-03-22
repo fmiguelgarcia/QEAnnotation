@@ -1,6 +1,6 @@
 cmake_minimum_required ( VERSION 3.5)
-project (Enterprise_QAnnotation)
+project (QEAnnotation)
 enable_testing()
 
-ADD_SUBDIRECTORY (src)
-ADD_SUBDIRECTORY (test)
+add_subdirectory( src/qe/annotation)
+add_subdirectory(test)

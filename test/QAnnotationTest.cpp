@@ -1,12 +1,12 @@
 #include "QAnnotationTest.hpp"
 #include "AnnotateClassOne.hpp"
-#include "QEAnnotationModel.hpp"
-#include "QEAnnotation.hpp"
+#include <qe/annotation/Annotation.hpp>
 #include <QTest>
+using namespace qe::annotation;
 
 void TestQAnnotation::QAnnotationModel_annotation()
 {
-	QEAnnotationModel annModel = QEAnnotation::registerModel<AnnotateClassOne>();
+	Model annModel = Annotation::registerModel<AnnotateClassOne>();
 
 	// Check member annotation
 	QVERIFY( annModel.annotation( "id", "@qorm.primary_key").value().toBool());

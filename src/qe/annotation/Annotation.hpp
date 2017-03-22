@@ -26,34 +26,32 @@
  */
 
 #pragma once
-#include "QEAnnotationModel.hpp"
+#include <qe/annotation/Model.hpp>
 #include <QByteArray>
 #include <map>
 
-QT_BEGIN_NAMESPACE
+namespace qe { namespace annotation {
+	
+	/// @brief It is an utility class to register annotation models.
+	class Annotation
+	{
+		public:
+			using AnnotationCacheByName = std::map<QByteArray, Model>;
 
-/// @brief It is an utility class to register annotation models.
-class QEAnnotation
-{
-	public:
-		using AnnotationCacheByName = std::map<QByteArray, QEAnnotationModel>;
+			/// @brief It registers the Annotation model for class T
+			template <class T>
+				static Model registerModel();
 
-		/// @brief It registers the Annotation model for class T
-		template <class T>
-		static QEAnnotationModel registerModel();
+			/// @brief It register the annotation model for metaobject @p meta.
+			static Model registerModel( const QMetaObject *meta);
 
-		/// @brief It register the annotation model for metaobject @p meta.
-		static QEAnnotationModel registerModel( const QMetaObject *meta);
+		private:
+			/// @brief Registered annotation models.
+			static AnnotationCacheByName m_registeredModels;
+	};
 
-	private:
-		/// @brief Registered annotation models.
-		static AnnotationCacheByName m_registeredModels;
-};
+	template <class T>
+	Model Annotation::registerModel()
+	{ return registerModel( &T::staticMetaObject);}
 
-template <class T>
-QEAnnotationModel QEAnnotation::registerModel()
-{
-	return registerModel( &T::staticMetaObject);
-}
-
-QT_END_NAMESPACE
+}}

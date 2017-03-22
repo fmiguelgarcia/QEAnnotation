@@ -24,7 +24,7 @@
  *
  * $QE_END_LICENSE$
  */
-#include "QEAnnotationModel.hpp"
+#include "Model.hpp"
 
 #include <QSharedData>
 #include <QMetaObject>
@@ -32,9 +32,9 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QRegularExpressionMatchIterator>
-#include <map>
+#include <QStringBuilder>
 
-QE_USE_NAMESPACE
+using namespace qe::annotation;
 using namespace std;
 
 namespace {
@@ -43,37 +43,38 @@ namespace {
 	/// Q_CLASSINFO
 	QString annotateAssignExpression()
 	{
-		const QLatin1Literal keyExp("(?<key>\\@(\\w(\\w|\\.)+))");
-		const QLatin1Literal valueOneWordExp("(?<valueOneWord>((\\w|/|:)+))");
-		const QLatin1Literal valueMuliWordsExp( "(\\'(?<valueMultiWords>((\\w|\\s|/|:)+))\\')");
+		static const QString keyExp = QStringLiteral("(?<key>\\@(\\w(\\w|\\.)+))");
+		static const QString valueOneWordExp = QStringLiteral("(?<valueOneWord>((\\w|/|:)+))");
+		static const QString valueMuliWordsExp = QStringLiteral( "(\\'(?<valueMultiWords>((\\w|\\s|/|:)+))\\')");
 
-		const QString assignExp = QString("%1\\s*=\\s*(%2|%3)")
-			.arg( keyExp)
-			.arg( valueOneWordExp)
-			.arg( valueMuliWordsExp);
+		static const QString assignExp =
+			keyExp 
+			% QStringLiteral("\\s*=\\s*(")
+			% valueOneWordExp % QStringLiteral("|") 
+			% valueMuliWordsExp % QStringLiteral( ")");
 
 		return assignExp;
 	}
 }
 
-QEAnnotationModel::QEAnnotationModel(const QMetaObject *meta)
-  : d_ptr( new QEAnnotationModelPrivate)
+Model::Model(const QMetaObject *meta)
+  : d_ptr( new ModelPrivate)
 {
 	if (meta)
 		parseMetaObject( meta);
 }
 
-QEAnnotationModel::QEAnnotationModel(const QEAnnotationModel &other) noexcept
+Model::Model(const Model &other) noexcept
   : d_ptr( other.d_ptr)
 {}
 
-QEAnnotationModel &QEAnnotationModel::operator=(const QEAnnotationModel &other) noexcept
+Model &Model::operator=(const Model &other) noexcept
 {
 	d_ptr = other.d_ptr;
 	return *this;
 }
 
-void QEAnnotationModel::parseMetaObject( const QMetaObject* meta)
+void Model::parseMetaObject( const QMetaObject* meta)
 {
 	for ( int ciIdx = 0; ciIdx < meta->classInfoCount(); ++ciIdx)
 	{
@@ -91,19 +92,19 @@ void QEAnnotationModel::parseMetaObject( const QMetaObject* meta)
 	}
 }
 
-QEAnnotationItemList QEAnnotationModel::parseAnnotationsInClassInfo(const QString annotations) const
+ItemList Model::parseAnnotationsInClassInfo(const QString annotations) const
 {
-	QEAnnotationItemList annotationItems;
+	ItemList annotationItems;
 
 	QRegularExpression assignExp( annotateAssignExpression());
 	QRegularExpressionMatchIterator matchItr = assignExp.globalMatch( annotations);
 	while ( matchItr.hasNext())
 	{
 		QRegularExpressionMatch match = matchItr.next();
-		QString key = match.captured( QLatin1Literal("key"));
-		QString value = match.captured( QLatin1Literal("valueOneWord"));
+		QString key = match.captured( QStringLiteral("key"));
+		QString value = match.captured( QStringLiteral("valueOneWord"));
 		if ( value.isEmpty())
-			value = match.captured( QLatin1Literal("valueMultiWords"));
+			value = match.captured( QStringLiteral("valueMultiWords"));
 
 		annotationItems.emplace_back( key, value);
 	}
@@ -111,12 +112,12 @@ QEAnnotationItemList QEAnnotationModel::parseAnnotationsInClassInfo(const QStrin
 	return annotationItems;
 }
 
-QEAnnotationItemByClassInfoId QEAnnotationModel::annotations() const
+ItemByClassInfoId Model::annotations() const
 { return d_ptr->m_annotationsByClassInfoId; }
 
-QEAnnotationItemList QEAnnotationModel::annotations(const QString classInfoId) const
+ItemList Model::annotations(const QString classInfoId) const
 {
-	QEAnnotationItemList itemList;
+	ItemList itemList;
 
 	auto annListItr = d_ptr->m_annotationsByClassInfoId.find( classInfoId);
 	if ( annListItr != end(d_ptr->m_annotationsByClassInfoId))
@@ -125,11 +126,11 @@ QEAnnotationItemList QEAnnotationModel::annotations(const QString classInfoId) c
 	return itemList;
 }
 
-QEAnnotationItem QEAnnotationModel::annotation(const QString classInfoId, const QString key) const
+Item Model::annotation(const QString classInfoId, const QString key) const
 {
-	QEAnnotationItem item;
-	QEAnnotationItemList itemList = annotations( classInfoId);
-	auto itemFoundRange = equal_range( begin(itemList), end(itemList), QEAnnotationItem(key));
+	Item item;
+	ItemList itemList = annotations( classInfoId);
+	auto itemFoundRange = equal_range( begin(itemList), end(itemList), Item(key));
 	if ( itemFoundRange.first !=  itemFoundRange.second)
 		item = *itemFoundRange.first;
 
