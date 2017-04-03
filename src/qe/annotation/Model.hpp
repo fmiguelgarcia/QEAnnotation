@@ -43,6 +43,7 @@ namespace qe { namespace annotation {
 	class ModelPrivate : public QSharedData
 	{
 		public:
+			const QMetaObject*  m_metaObject;
 			/// @brief Annotation map by Class Info identifier.
 			ItemByClassInfoId m_annotationsByClassInfoId;
 	};
@@ -104,6 +105,9 @@ namespace qe { namespace annotation {
 
 			/// @brief It gets all annotations for this model.
 			ItemByClassInfoId annotations() const;
+
+			/// @return The meta-object related with this model.
+			const QMetaObject* metaObject() const noexcept;
 
 		private:
 			/// @brief It parses all annotations for class info tags.

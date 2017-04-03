@@ -61,7 +61,10 @@ Model::Model(const QMetaObject *meta)
   : d_ptr( new ModelPrivate)
 {
 	if (meta)
+	{
+		d_ptr->m_metaObject = meta;
 		parseMetaObject( meta);
+	}
 }
 
 Model::Model(const Model &other) noexcept
@@ -136,3 +139,7 @@ Item Model::annotation(const QString &classInfoId, const QString &key) const
 
 	return item;
 }
+
+const QMetaObject* Model::metaObject() const noexcept
+{ return d_ptr->m_metaObject;}
+
