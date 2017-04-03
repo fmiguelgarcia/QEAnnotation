@@ -39,48 +39,9 @@ namespace qe { namespace annotation {
 	using ItemList = std::vector<Item>;
 	using ItemByClassInfoId = std::map<QString, ItemList>;
 
-	/// @brief Shared data of Model. 
-	class ModelPrivate : public QSharedData
-	{
-		public:
-			const QMetaObject*  m_metaObject;
-			/// @brief Annotation map by Class Info identifier.
-			ItemByClassInfoId m_annotationsByClassInfoId;
-	};
 
 	/// @brief It parses the meta-object information and allows to find class and 
 	///	members annotations. 
-	///
-	/// This class uses a implicitly shared (see http://doc.qt.io/qt-5/implicit-sharing.html).
-	/// Annotations are extracted from Q_CLASSINFO detected by moc. Let's see the
-	/// following example:
-	/// @code{.cpp}
-	///	class Person : public QObject
-	///	{
-	///		Q_OBJECT
-	///		Q_PROPERTY( QString name MEMBER name)
-	///
-	///		Q_CLASSINFO( "class", "@QEOrm.table=person")
-	///		Q_CLASSINFO( "name", "@QEOrm.maxLength=128 @QEOrm.isNullable=false")
-	///
-	///		public:
-	///			Person( QObject* parent = nullptr);
-	///		
-	///			QString name;
-	///	};
-	/// @endcode
-	///
-	/// In above code, we have used Q_CLASSINFO macro to add several annotations:
-	///	- Q_CLASSINFO( "class", "@QEOrm.table=person"): It associates the
-	/// annotation "@QEOrm.table" to the class info id "class".
-	///	- 	Q_CLASSINFO( "name", "@QEOrm.maxLength=128 @QEOrm.isNullable=false"):
-	/// In this case, we've associated two annotations to property "name".
-	/// When class info id is a name of a property, we consider that annotations are
-	/// linked to this property.
-	/// The class info id "class" is an special case because some annotation models
-	/// considers it as a class scope annotation.
-	/// You can add any number of annotations into a Q_CLASSINFO using the space as
-	/// a separator character. Every annotation *HAVE TO* start with '@'.
 	class Model
 	{
 		public:
@@ -93,6 +54,9 @@ namespace qe { namespace annotation {
 
 			/// @brief Copy operator.
 			Model& operator = ( const Model& ) noexcept;
+
+			/// @brief
+			~Model();
 
 			/// @brief It gets the annotation for the specific @p classInfoId and @p
 			/// key. 

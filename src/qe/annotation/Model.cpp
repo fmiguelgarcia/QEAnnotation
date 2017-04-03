@@ -57,6 +57,22 @@ namespace {
 	}
 }
 
+// Class ModelPrivate
+// ============================================================================
+
+namespace qe { namespace annotation {
+	class ModelPrivate : public QSharedData
+	{
+		public:
+			const QMetaObject*  m_metaObject;
+			/// @brief Annotation map by Class Info identifier.
+			ItemByClassInfoId m_annotationsByClassInfoId;
+	};
+}}
+
+// Class Model
+// ============================================================================
+
 Model::Model(const QMetaObject *meta)
   : d_ptr( new ModelPrivate)
 {
@@ -76,6 +92,9 @@ Model &Model::operator=(const Model &other) noexcept
 	d_ptr = other.d_ptr;
 	return *this;
 }
+
+Model::~Model()
+{}
 
 void Model::parseMetaObject( const QMetaObject* meta)
 {
