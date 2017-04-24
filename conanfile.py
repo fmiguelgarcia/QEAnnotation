@@ -16,8 +16,7 @@ class QEAnnotationConan(ConanFile):
     def build(self):
         cmake = CMake( self.settings)
         self.run( "cmake %s %s" % (self.conanfile_directory, cmake.command_line))
-        self.run( "cmake --build . %s %s" % (cmake.build_config, 
-            ("-- -j %d " % multiprocessing.cpu_count()) if os_info.is_linux else ""))
+        self.run( "cmake --build . %s" % cmake.build_config)
 
     def package(self):
         self.copy( pattern="*.hpp", dst="include/qe/annotation/",
@@ -25,6 +24,8 @@ class QEAnnotationConan(ConanFile):
         self.copy( pattern="LICENSE.LGPLv3", dst="share/qe/annotation")
         self.copy( pattern="libQEAnnotation.so*", dst="lib",
                 src="src/qe/annotation", links=True)
+        self.copy( pattern="libQEAnnotation.dll", dst="lib", src="src/qe/annotation/bin")
+        self.copy( pattern="libQEAnnotation.dll.a", dst="lib", src="src/qe/annotation/lib")
 
     def package_info(self):
         self.cpp_info.libs.extend(["QEAnnotation"])
