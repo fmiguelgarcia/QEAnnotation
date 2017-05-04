@@ -6,9 +6,11 @@ set( QEAnnotation_BUILD_VERSION 0)
 
 # Source
 set( QEAnnotation_SRCS
+	Global.hpp
 	Item.cpp Model.cpp Annotation.cpp)
 
 # Link
+add_definitions( -DQEANNOTATION_LIBRARY)
 add_library( QEAnnotation SHARED ${QEAnnotation_SRCS})
 target_link_libraries( QEAnnotation Qt5::Core ${CONAN_LIBS}) 
 set_target_properties( QEAnnotation

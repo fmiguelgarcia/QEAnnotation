@@ -1,6 +1,4 @@
 from conans import ConanFile, CMake 
-from conans.tools import os_info
-import multiprocessing
 
 class QEAnnotationConan(ConanFile):
     name = "QEAnnotation"
@@ -14,9 +12,9 @@ class QEAnnotationConan(ConanFile):
     exports_sources = ["src/*", "test/*", "tools/*", "CMakeLists.txt"]
 
     def build(self):
-        cmake = CMake( self.settings)
-        self.run( "cmake %s %s" % (self.conanfile_directory, cmake.command_line))
-        self.run( "cmake --build . %s" % cmake.build_config)
+        cmake = CMake( self)
+        cmake.configure()
+        cmake.build()
 
     def package(self):
         self.copy( pattern="*.hpp", dst="include/qe/annotation/",
@@ -24,8 +22,13 @@ class QEAnnotationConan(ConanFile):
         self.copy( pattern="LICENSE.LGPLv3", dst="share/qe/annotation")
         self.copy( pattern="libQEAnnotation.so*", dst="lib",
                 src="src/qe/annotation", links=True)
-        self.copy( pattern="libQEAnnotation.dll", dst="lib", src="src/qe/annotation/bin")
-        self.copy( pattern="libQEAnnotation.dll.a", dst="lib", src="src/qe/annotation/lib")
+        if self.settings.os == "Windows":
+            libNames = ["QEAnnotation", "libQEAnnotation"]
+            libExts = [".dll", ".lib", ".dll.a", ".pdb"]
+            for libName in libNames:
+                for libExt in libExts:
+                    filePattern = "**/" + libName + libExt
+                    self.copy( pattern=filePattern, dst="lib", src="src/qe/annotation", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs.extend(["QEAnnotation"])

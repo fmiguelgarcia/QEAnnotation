@@ -25,6 +25,7 @@
  * $QE_END_LICENSE$
  */
 #pragma once
+#include <qe/annotation/Global.hpp>
 #include <qe/annotation/Item.hpp>
 #include <QString>
 #include <QSharedDataPointer>
@@ -42,7 +43,7 @@ namespace qe { namespace annotation {
 
 	/// @brief It parses the meta-object information and allows to find class and 
 	///	members annotations. 
-	class Model
+    class QEANNOTATION_EXPORT Model
 	{
 		public:
 			/// @brief It creates an annotation model using meta-information from

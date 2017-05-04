@@ -1,10 +1,11 @@
-#include "QEAnnotation.hpp"
-#include "QEAnnotationModel.hpp"
+#include <qe/annotation/Annotation.hpp>
 #include <QObject>
+
+using namespace qe::annotation;
 
 int main(int argc, char** argv)
 {
-	QEAnnotationModel annModel = QEAnnotation::registerModel<QObject>();
+	auto annModel = Annotation::registerModel<QObject>();
 
 	return 0;
 }

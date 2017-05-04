@@ -26,13 +26,14 @@
  */
 
 #pragma once
+#include <qe/annotation/Global.hpp>
 #include <QString>
 #include <QVariant>
 
 namespace qe { namespace annotation {
 
 	/// @brief It stores the key and value of an annotation.
-	class Item
+    class QEANNOTATION_EXPORT Item
 	{
 		public:
 			/// @brief Constructor.
