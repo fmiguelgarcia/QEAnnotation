@@ -34,12 +34,10 @@
 #include <vector>
 
 namespace qe { namespace annotation {
-	
 	class ModelPrivate;
 
 	using ItemList = std::vector<Item>;
 	using ItemByClassInfoId = std::map<QString, ItemList>;
-
 
 	/// @brief It parses the meta-object information and allows to find class and 
 	///	members annotations. 
@@ -81,8 +79,10 @@ namespace qe { namespace annotation {
 			/// @brief It parses annotations found in @p annotations string.
 			ItemList parseAnnotationsInClassInfo(const QString &annotations) const;
 
-		private:
+		protected:
 			QSharedDataPointer<ModelPrivate> d_ptr;
+			Model( QSharedDataPointer<ModelPrivate>&& dd, const QMetaObject* meta);
+
 	};
 }}
 	

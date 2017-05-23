@@ -74,7 +74,16 @@ namespace qe { namespace annotation {
 // ============================================================================
 
 Model::Model(const QMetaObject *meta)
-  : d_ptr( new ModelPrivate)
+  : Model( QSharedDataPointer<ModelPrivate>( new ModelPrivate), meta)
+{}
+
+Model::Model(const Model &other) noexcept
+  : d_ptr( other.d_ptr)
+{}
+		
+/// @brief 
+Model::Model( QSharedDataPointer<ModelPrivate>&& dd, const QMetaObject* meta)
+	: d_ptr(dd)
 {
 	if (meta)
 	{
@@ -82,10 +91,6 @@ Model::Model(const QMetaObject *meta)
 		parseMetaObject( meta);
 	}
 }
-
-Model::Model(const Model &other) noexcept
-  : d_ptr( other.d_ptr)
-{}
 
 Model &Model::operator=(const Model &other) noexcept
 {

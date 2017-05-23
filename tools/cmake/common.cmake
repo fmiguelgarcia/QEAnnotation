@@ -4,9 +4,6 @@ conan_basic_setup()
 
 # Find common packages.
 find_package( Qt5Core REQUIRED)
-find_package( Qt5DBus REQUIRED)
-find_package( Qt5Sql REQUIRED)
-find_package( Qt5Network REQUIRED)
 
 # Qt setup.
 set( CMAKE_AUTOMOC ON)

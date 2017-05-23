@@ -27,13 +27,15 @@
 
 #pragma once
 #include <qe/annotation/Global.hpp>
+#include <QtGlobal>
 #include <QString>
 #include <QVariant>
 
 namespace qe { namespace annotation {
+	class ItemPrivate;
 
 	/// @brief It stores the key and value of an annotation.
-    class QEANNOTATION_EXPORT Item
+	class QEANNOTATION_EXPORT Item
 	{
 		public:
 			/// @brief Constructor.
@@ -46,6 +48,8 @@ namespace qe { namespace annotation {
 
 			/// @brief Copy constructor.
 			Item( const Item &other) noexcept;
+
+			virtual ~Item();
 
 			/// @brief Copy operator.
 			Item &operator =( const Item &other);
@@ -71,8 +75,14 @@ namespace qe { namespace annotation {
 			/// null
 			QVariant value( const QVariant &defaultValue = QVariant()) const noexcept;
 
+		protected:
+			ItemPrivate * d_ptr;
+			// explicit Item( ItemPrivate * dd);
+
 		private:
 			QString m_key;			///< Key
 			QVariant m_value;		///< Value
+
+			Q_DECLARE_PRIVATE( Item);
 	};
 }}

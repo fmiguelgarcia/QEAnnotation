@@ -41,6 +41,15 @@ Item::Item(const Item &other) noexcept
   : m_key(other.m_key), m_value(other.m_value)
 {}
 
+#if 0
+Item::Item( ItemPrivate * dd)
+	: d_ptr(dd)
+{}
+#endif
+
+Item::~Item()
+{}
+
 Item &Item::operator=(const Item &other) = default;
 
 Item &Item::operator=(Item &&other)

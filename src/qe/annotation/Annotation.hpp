@@ -30,6 +30,7 @@
 #include <qe/annotation/Model.hpp>
 #include <QByteArray>
 #include <map>
+#include <mutex>
 
 namespace qe { namespace annotation {
 	
@@ -49,6 +50,7 @@ namespace qe { namespace annotation {
 		private:
 			/// @brief Registered annotation models.
 			static AnnotationCacheByName m_registeredModels;
+			static std::mutex m_registeredModelsMtx;
 	};
 
 	template <class T>

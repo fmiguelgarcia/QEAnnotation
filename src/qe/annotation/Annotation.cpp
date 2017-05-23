@@ -31,6 +31,7 @@ using namespace qe::annotation;
 using namespace std;
 
 Annotation::AnnotationCacheByName Annotation::m_registeredModels;
+mutex Annotation::m_registeredModelsMtx;
 
 Model Annotation::registerModel(const QMetaObject *meta)
 {
@@ -39,9 +40,14 @@ Model Annotation::registerModel(const QMetaObject *meta)
 	{
 		const QByteArray name = meta->className();
 		auto itr = m_registeredModels.find( name);
-		if (itr == end(m_registeredModels))
-			itr = m_registeredModels.insert(
-				make_pair (name, Model(meta))).first;
+		if( itr == end(m_registeredModels))
+		{
+			lock_guard<mutex> _(m_registeredModelsMtx);
+			itr = m_registeredModels.find( name);
+			if (itr == end(m_registeredModels))
+				itr = m_registeredModels.insert(
+					make_pair (name, Model(meta))).first;
+		}
 		model = itr->second;
 	}
 

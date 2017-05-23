@@ -2,8 +2,8 @@ from conans import ConanFile, CMake
 
 class QEAnnotationConan(ConanFile):
     name = "QEAnnotation"
-    version = "0.1.0"
-    requires = "QECommon/0.1.0@fmiguelgarcia/stable"
+    version = "1.0.0"
+    requires = "QECommon/1.0.0@fmiguelgarcia/stable"
     settings = "os", "compiler", "build_type", "arch"
     license = "https://www.gnu.org/licenses/lgpl-3.0-standalone.html"
     generators = "cmake"
