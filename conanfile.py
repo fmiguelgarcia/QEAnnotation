@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake 
+import os
 
 class QEAnnotationConan(ConanFile):
     name = "QEAnnotation"
@@ -10,6 +11,12 @@ class QEAnnotationConan(ConanFile):
     url = "https://github.com/fmiguelgarcia/QEAnnotation.git"
     description = "Annotation library in Qt Enterprise"
     exports_sources = ["src/*", "test/*", "tools/*", "CMakeLists.txt"]
+    options = { "qt_version": "ANY"}
+
+    def configure(self):
+        self.options.qt_version = os.popen("qmake -query QT_VERSION").read().strip()
+        self.output.info("Configure Qt Version: %s" % self.options.qt_version)
+
 
     def build(self):
         cmake = CMake( self)
