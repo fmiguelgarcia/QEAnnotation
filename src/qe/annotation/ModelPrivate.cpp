@@ -69,7 +69,7 @@ namespace {
 			if ( value.isEmpty())
 				value = match.captured( QStringLiteral("valueMultiWords"));
 
-			annotationItems.emplace_back( key, value);
+			annotationItems.push_back( Item(key, value));
 		}
 
 		return annotationItems;
@@ -109,7 +109,7 @@ const Item ModelPrivate::findAnnotation(
 	const QString &key) const
 {
 	Item item;
-	ItemList itemList = findAnnotations( classInfoId);
+	const ItemList itemList = findAnnotations( classInfoId);
 
 	auto itemFoundRange = equal_range( begin(itemList), end(itemList), Item(key));
 	if ( itemFoundRange.first !=  itemFoundRange.second)
@@ -125,7 +125,7 @@ const ItemList ModelPrivate::findAnnotations(
 
 	auto annListItr = annotations.find( classInfoId);
 	if ( annListItr != end(annotations))
-		itemList = annListItr->second;
+		itemList = annListItr.value();
 
 	return itemList;
 }

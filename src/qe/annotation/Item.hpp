@@ -30,11 +30,10 @@
 #include <QtGlobal>
 #include <QString>
 #include <QVariant>
-#include <vector>
-#include <map>
+#include <QVector>
+#include <QMap>
 
 namespace qe { namespace annotation {
-	class ItemPrivate;
 
 	/// @brief It stores the key and value of an annotation.
 	class QEANNOTATION_EXPORT Item
@@ -77,17 +76,11 @@ namespace qe { namespace annotation {
 			/// null
 			QVariant value( const QVariant &defaultValue = QVariant()) const noexcept;
 
-		protected:
-			ItemPrivate * d_ptr;
-			// explicit Item( ItemPrivate * dd);
-
 		private:
 			QString m_key;			///< Key
 			QVariant m_value;		///< Value
-
-			Q_DECLARE_PRIVATE( Item);
 	};
 
-	using ItemList = std::vector<Item>;
-	using ItemByClassInfoId = std::map<QString, ItemList>;
+	using ItemList = QVector<Item>;
+	using ItemByClassInfoId = QMap<QString, ItemList>;
 }}
