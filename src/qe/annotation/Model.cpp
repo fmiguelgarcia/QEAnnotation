@@ -57,6 +57,10 @@ Model::Model( QExplicitlySharedDataPointer<ModelPrivate>&& dd) noexcept
 	: d_ptr( std::move(dd))
 {}
 
+Model::Model( const QExplicitlySharedDataPointer<ModelPrivate>& dd) noexcept
+	: d_ptr( dd)
+{}
+
 Model::~Model()
 {}
 

@@ -54,7 +54,9 @@ namespace qe { namespace annotation {
 
 		protected:
 			QExplicitlySharedDataPointer<ModelPrivate> d_ptr;
-			Model( QExplicitlySharedDataPointer<ModelPrivate>&& dd) noexcept;
+
+			explicit Model( QExplicitlySharedDataPointer<ModelPrivate>&& dd) noexcept;
+			explicit Model( const QExplicitlySharedDataPointer<ModelPrivate>& dd) noexcept;
 
 		private:
 			/// @brief It parses all annotations for class info tags.
