@@ -104,3 +104,28 @@ ModelPrivate::ModelPrivate( const QMetaObject* meta)
 		annotations = parseMetaObject( meta);
 }
 
+const Item ModelPrivate::findAnnotation(
+	const QString &classInfoId,
+	const QString &key) const
+{
+	Item item;
+	ItemList itemList = findAnnotations( classInfoId);
+
+	auto itemFoundRange = equal_range( begin(itemList), end(itemList), Item(key));
+	if ( itemFoundRange.first !=  itemFoundRange.second)
+		item = *itemFoundRange.first;
+
+	return item;
+}
+
+const ItemList ModelPrivate::findAnnotations(
+	const QString &classInfoId) const
+{
+	ItemList itemList;
+
+	auto annListItr = annotations.find( classInfoId);
+	if ( annListItr != end(annotations))
+		itemList = annListItr->second;
+
+	return itemList;
+}

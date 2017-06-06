@@ -41,6 +41,13 @@ namespace qe { namespace annotation {
 		public:
 			explicit ModelPrivate( const QMetaObject* meta);
 
+			const Item findAnnotation(
+				const QString &classInfoId,
+				const QString &key) const;
+
+			const ItemList findAnnotations(
+				const QString &classInfoId) const;
+
 		public:
 			const QMetaObject*  metaObject;
 

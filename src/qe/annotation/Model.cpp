@@ -82,14 +82,8 @@ ItemByClassInfoId Model::annotations() const
 /// @brief It gets all annotations for a specific classInfoId.
 ItemList Model::annotations(const QString &classInfoId) const
 {
-	ItemList itemList;
 	const Q_D(Model);
-
-	auto annListItr = d->annotations.find( classInfoId);
-	if ( annListItr != end(d->annotations))
-		itemList = annListItr->second;
-
-	return itemList;
+	return d->findAnnotations( classInfoId);
 }
 
 /// @brief It gets the annotation for the specific @p classInfoId and @p
@@ -98,14 +92,8 @@ ItemList Model::annotations(const QString &classInfoId) const
 /// @param key
 Item Model::annotation(const QString &classInfoId, const QString &key) const
 {
-	Item item;
-	ItemList itemList = annotations( classInfoId);
-
-	auto itemFoundRange = equal_range( begin(itemList), end(itemList), Item(key));
-	if ( itemFoundRange.first !=  itemFoundRange.second)
-		item = *itemFoundRange.first;
-
-	return item;
+	const Q_D(Model);
+	return d->findAnnotation( classInfoId, key);
 }
 
 /// @return The meta-object related with this model.
