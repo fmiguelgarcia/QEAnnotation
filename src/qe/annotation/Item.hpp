@@ -30,6 +30,8 @@
 #include <QtGlobal>
 #include <QString>
 #include <QVariant>
+#include <vector>
+#include <map>
 
 namespace qe { namespace annotation {
 	class ItemPrivate;
@@ -85,4 +87,7 @@ namespace qe { namespace annotation {
 
 			Q_DECLARE_PRIVATE( Item);
 	};
+
+	using ItemList = std::vector<Item>;
+	using ItemByClassInfoId = std::map<QString, ItemList>;
 }}

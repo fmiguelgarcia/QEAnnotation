@@ -25,72 +25,40 @@
  * $QE_END_LICENSE$
  */
 #include "Model.hpp"
-
-#include <QSharedData>
-#include <QMetaObject>
-#include <QMetaClassInfo>
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-#include <QRegularExpressionMatchIterator>
-#include <QStringBuilder>
+#include "ModelPrivate.hpp"
 
 using namespace qe::annotation;
 using namespace std;
 
-namespace {
+/**
+ * \class qe::annotation::Model
+ * \brief It parses the meta-object information and allows to find class and
+ * members annotations.
+ * This class use Explicit shared data.
+ */
 
-	/// @brief It creates the annotate assign expression using to parse
-	/// Q_CLASSINFO
-	QString annotateAssignExpression()
-	{
-		static const QString keyExp = QStringLiteral("(?<key>\\@(\\w(\\w|\\.)+))");
-		static const QString valueOneWordExp = QStringLiteral("(?<valueOneWord>((\\w|/|:)+))");
-		static const QString valueMuliWordsExp = QStringLiteral( "(\\'(?<valueMultiWords>((\\w|\\s|/|:)+))\\')");
-
-		static const QString assignExp =
-			keyExp 
-			% QStringLiteral("\\s*=\\s*(")
-			% valueOneWordExp % QStringLiteral("|") 
-			% valueMuliWordsExp % QStringLiteral( ")");
-
-		return assignExp;
-	}
-}
-
-// Class ModelPrivate
-// ============================================================================
-
-namespace qe { namespace annotation {
-	class ModelPrivate : public QSharedData
-	{
-		public:
-			const QMetaObject*  m_metaObject;
-			/// @brief Annotation map by Class Info identifier.
-			ItemByClassInfoId m_annotationsByClassInfoId;
-	};
-}}
-
-// Class Model
-// ============================================================================
-
+/// @brief It creates an annotation model using meta-information from
+/// @p meta Annotation information will be extracted from here.
 Model::Model(const QMetaObject *meta)
-  : Model( QSharedDataPointer<ModelPrivate>( new ModelPrivate), meta)
+  : Model(
+		QExplicitlySharedDataPointer<ModelPrivate>(
+			new ModelPrivate(meta)))
 {}
 
 Model::Model(const Model &other) noexcept
   : d_ptr( other.d_ptr)
 {}
-		
-/// @brief 
-Model::Model( QSharedDataPointer<ModelPrivate>&& dd, const QMetaObject* meta)
-	: d_ptr(dd)
-{
-	if (meta)
-	{
-		d_ptr->m_metaObject = meta;
-		parseMetaObject( meta);
-	}
-}
+
+Model::Model(Model &&other) noexcept
+  : d_ptr( std::move(other.d_ptr))
+{}
+
+Model::Model( QExplicitlySharedDataPointer<ModelPrivate>&& dd) noexcept
+	: d_ptr( std::move(dd))
+{}
+
+Model::~Model()
+{}
 
 Model &Model::operator=(const Model &other) noexcept
 {
@@ -98,65 +66,41 @@ Model &Model::operator=(const Model &other) noexcept
 	return *this;
 }
 
-Model::~Model()
-{}
-
-void Model::parseMetaObject( const QMetaObject* meta)
+Model &Model::operator=( Model &&other) noexcept
 {
-	for ( int ciIdx = 0; ciIdx < meta->classInfoCount(); ++ciIdx)
-	{
-		const QMetaClassInfo metaClassInfo = meta->classInfo( ciIdx);
-		auto parsedAnnotations = parseAnnotationsInClassInfo( metaClassInfo.value());
-
-		// Add new annotations
-		auto & curAnnotations = d_ptr->m_annotationsByClassInfoId[metaClassInfo.name()];
-		copy( begin(parsedAnnotations), end(parsedAnnotations),
-			back_inserter<>(curAnnotations));
-
-		// Remove duplicates.
-		sort( begin(curAnnotations), end(curAnnotations));
-		curAnnotations.erase( unique(begin(curAnnotations), end(curAnnotations)), end(curAnnotations));
-	}
+	d_ptr = std::move( other.d_ptr);
+	return *this;
 }
 
-ItemList Model::parseAnnotationsInClassInfo(const QString &annotations) const
-{
-	ItemList annotationItems;
-
-	QRegularExpression assignExp( annotateAssignExpression());
-	QRegularExpressionMatchIterator matchItr = assignExp.globalMatch( annotations);
-	while ( matchItr.hasNext())
-	{
-		QRegularExpressionMatch match = matchItr.next();
-		QString key = match.captured( QStringLiteral("key"));
-		QString value = match.captured( QStringLiteral("valueOneWord"));
-		if ( value.isEmpty())
-			value = match.captured( QStringLiteral("valueMultiWords"));
-
-		annotationItems.emplace_back( key, value);
-	}
-
-	return annotationItems;
-}
-
+/// @brief It gets all annotations for this model.
 ItemByClassInfoId Model::annotations() const
-{ return d_ptr->m_annotationsByClassInfoId; }
+{
+	const Q_D(Model);
+	return d->annotations;
+}
 
+/// @brief It gets all annotations for a specific classInfoId.
 ItemList Model::annotations(const QString &classInfoId) const
 {
 	ItemList itemList;
+	const Q_D(Model);
 
-	auto annListItr = d_ptr->m_annotationsByClassInfoId.find( classInfoId);
-	if ( annListItr != end(d_ptr->m_annotationsByClassInfoId))
+	auto annListItr = d->annotations.find( classInfoId);
+	if ( annListItr != end(d->annotations))
 		itemList = annListItr->second;
 
 	return itemList;
 }
 
+/// @brief It gets the annotation for the specific @p classInfoId and @p
+/// key.
+/// @param classInfoId Q_CLASSINFO name use to store annotation.
+/// @param key
 Item Model::annotation(const QString &classInfoId, const QString &key) const
 {
 	Item item;
 	ItemList itemList = annotations( classInfoId);
+
 	auto itemFoundRange = equal_range( begin(itemList), end(itemList), Item(key));
 	if ( itemFoundRange.first !=  itemFoundRange.second)
 		item = *itemFoundRange.first;
@@ -164,6 +108,15 @@ Item Model::annotation(const QString &classInfoId, const QString &key) const
 	return item;
 }
 
+/// @return The meta-object related with this model.
 const QMetaObject* Model::metaObject() const noexcept
-{ return d_ptr->m_metaObject;}
+{
+	const Q_D(Model);
+	return d->metaObject;
+}
+
+void Model::detach()
+{
+	d_ptr.detach();
+}
 

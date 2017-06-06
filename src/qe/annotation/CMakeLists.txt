@@ -7,7 +7,10 @@ set( QEAnnotation_BUILD_VERSION 0)
 # Source
 set( QEAnnotation_SRCS
 	Global.hpp
-	Item.cpp Model.cpp Annotation.cpp)
+	Item.cpp
+	ModelPrivate.cpp
+	Model.cpp
+	Annotation.cpp)
 add_definitions( -DQEANNOTATION_LIB_BUILD)
 
 # Link

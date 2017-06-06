@@ -27,50 +27,34 @@
 #pragma once
 #include <qe/annotation/Global.hpp>
 #include <qe/annotation/Item.hpp>
-#include <QString>
-#include <QSharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 #include <QMetaObject>
-#include <map>
-#include <vector>
 
 namespace qe { namespace annotation {
 	class ModelPrivate;
 
-	using ItemList = std::vector<Item>;
-	using ItemByClassInfoId = std::map<QString, ItemList>;
 
-	/// @brief It parses the meta-object information and allows to find class and 
-	///	members annotations. 
-    class QEANNOTATION_EXPORT Model
+   class QEANNOTATION_EXPORT Model
 	{
 		public:
-			/// @brief It creates an annotation model using meta-information from
-			/// @p meta.
 			explicit Model( const QMetaObject* meta);
-
-			/// @brief Copy constructor.
 			Model( const Model& ) noexcept;
-
-			/// @brief Copy operator.
-			Model& operator = ( const Model& ) noexcept;
-
-			/// @brief
+			Model( Model&& ) noexcept;
 			~Model();
 
-			/// @brief It gets the annotation for the specific @p classInfoId and @p
-			/// key. 
-			/// @param classInfoId Q_CLASSINFO name use to store annotation.
-			/// @param key
+			Model& operator = ( const Model& ) noexcept;
+			Model& operator = ( Model&& ) noexcept;
+
 			Item annotation( const QString &classInfoId, const QString &key) const;
-
-			/// @brief It gets all annotations for a specific classInfoId.
 			ItemList annotations( const QString &classInfoId) const;
-
-			/// @brief It gets all annotations for this model.
 			ItemByClassInfoId annotations() const;
-
-			/// @return The meta-object related with this model.
 			const QMetaObject* metaObject() const noexcept;
+
+			void detach();
+
+		protected:
+			QExplicitlySharedDataPointer<ModelPrivate> d_ptr;
+			Model( QExplicitlySharedDataPointer<ModelPrivate>&& dd) noexcept;
 
 		private:
 			/// @brief It parses all annotations for class info tags.
@@ -79,10 +63,7 @@ namespace qe { namespace annotation {
 			/// @brief It parses annotations found in @p annotations string.
 			ItemList parseAnnotationsInClassInfo(const QString &annotations) const;
 
-		protected:
-			QSharedDataPointer<ModelPrivate> d_ptr;
-			Model( QSharedDataPointer<ModelPrivate>&& dd, const QMetaObject* meta);
-
+			Q_DECLARE_PRIVATE( Model);
 	};
 }}
 	
