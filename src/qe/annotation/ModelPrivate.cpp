@@ -129,3 +129,10 @@ const ItemList ModelPrivate::findAnnotations(
 
 	return itemList;
 }
+
+void ModelPrivate::setName(const QString& name)
+{ m_name = name;}
+
+const QString & ModelPrivate::name() const noexcept
+{ return m_name; }
+

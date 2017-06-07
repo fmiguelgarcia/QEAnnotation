@@ -45,6 +45,8 @@ namespace qe { namespace annotation {
 			Model& operator = ( const Model& ) noexcept;
 			Model& operator = ( Model&& ) noexcept;
 
+			const QString& name() const noexcept;
+
 			Item annotation( const QString &classInfoId, const QString &key) const;
 			ItemList annotations( const QString &classInfoId) const;
 			ItemByClassInfoId annotations() const;

@@ -41,6 +41,8 @@ namespace qe { namespace annotation {
 		public:
 			explicit ModelPrivate( const QMetaObject* meta);
 
+			const QString& name() const noexcept;
+
 			const Item findAnnotation(
 				const QString &classInfoId,
 				const QString &key) const;
@@ -50,9 +52,14 @@ namespace qe { namespace annotation {
 
 		public:
 			const QMetaObject*  metaObject;
-
 			/// @brief Annotation map by Class Info identifier.
 			ItemByClassInfoId annotations;
+
+		protected:
+			void setName( const QString& name);
+
+		private:
+			QString m_name;						///< Model name.
 	};
 }}
 

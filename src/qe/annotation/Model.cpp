@@ -76,6 +76,12 @@ Model &Model::operator=( Model &&other) noexcept
 	return *this;
 }
 
+const QString& Model::name() const noexcept
+{
+	const Q_D(Model);
+	return d->name();
+}
+
 /// @brief It gets all annotations for this model.
 ItemByClassInfoId Model::annotations() const
 {
