@@ -33,8 +33,7 @@
 namespace qe { namespace annotation {
 	class ModelPrivate;
 
-
-   class QEANNOTATION_EXPORT Model
+	class QEANNOTATION_EXPORT Model
 	{
 		public:
 			explicit Model( const QMetaObject* meta);
