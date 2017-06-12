@@ -26,6 +26,7 @@
  */
 
 #pragma once
+#include <qe/annotation/Global.hpp>
 #include <qe/annotation/Item.hpp>
 #include <QMetaObject>
 #include <QSharedData>
@@ -36,7 +37,7 @@
 
 namespace qe { namespace annotation {
 
-	class ModelPrivate : public QSharedData
+	class QEANNOTATION_EXPORT ModelPrivate : public QSharedData
 	{
 		public:
 			explicit ModelPrivate( const QMetaObject* meta);
