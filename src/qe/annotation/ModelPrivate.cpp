@@ -81,10 +81,13 @@ namespace {
 		for ( int ciIdx = 0; ciIdx < meta->classInfoCount(); ++ciIdx)
 		{
 			const QMetaClassInfo metaClassInfo = meta->classInfo( ciIdx);
-			auto parsedAnnotations = parseAnnotationsInClassInfo( metaClassInfo.value());
+			const QString mcName = metaClassInfo.name();
+			const QString mcValue = metaClassInfo.value();
+
+			auto parsedAnnotations = parseAnnotationsInClassInfo( mcValue);
 
 			// Add new annotations
-			auto & curAnnotations = annotationsByClassInfoId[metaClassInfo.name()];
+			auto & curAnnotations = annotationsByClassInfoId[ mcName];
 			copy( begin(parsedAnnotations), end(parsedAnnotations),
 				  back_inserter<>(curAnnotations));
 
