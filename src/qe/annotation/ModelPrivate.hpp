@@ -45,7 +45,7 @@ namespace qe { namespace annotation {
 	class QEANNOTATION_EXPORT ModelPrivate : public QSharedData
 	{
 		public:
-			explicit ModelPrivate( const QMetaObject* meta);
+			explicit ModelPrivate( const QMetaObject* meta = nullptr);
 
 			const QString& name() const noexcept;
 
