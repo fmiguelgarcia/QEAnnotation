@@ -31,9 +31,14 @@
 #include <QMetaObject>
 #include <QSharedData>
 #include <QString>
-
+#include <boost/serialization/nvp.hpp>
 #include <vector>
 #include <map>
+
+namespace boost { namespace archive {
+	class polymorphic_iarchive;
+	class polymorphic_oarchive;
+}}
 
 namespace qe { namespace annotation {
 
@@ -50,6 +55,22 @@ namespace qe { namespace annotation {
 
 			const ItemList findAnnotations(
 				const QString &classInfoId) const;
+
+			// Serialization
+#if 1
+			void save( boost::archive::polymorphic_oarchive& oa, const unsigned int) const;
+			void load( boost::archive::polymorphic_iarchive& ia, const unsigned int);
+			BOOST_SERIALIZATION_SPLIT_MEMBER()
+#else
+			template< class Archive>
+			void serialize( Archive& ar, const unsigned int )
+			{
+				using namespace boost::serialization;
+				ar & make_nvp( "name", m_name);
+				ar & make_nvp( "annotations", annotations);
+				ar & make_nvp( "metaObject", metaObject);
+			}
+#endif
 
 		public:
 			const QMetaObject*  metaObject;

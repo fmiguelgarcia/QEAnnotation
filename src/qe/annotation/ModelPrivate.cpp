@@ -26,6 +26,11 @@
  */
 
 #include "ModelPrivate.hpp"
+#include <qe/common/serialization/QVariant.hpp>
+#include <qe/common/serialization/QMetaObject.hpp>
+#include <qe/common/serialization/QMap.hpp>
+#include <qe/common/serialization/QVector.hpp>
+
 #include <QMetaObject>
 #include <QMetaClassInfo>
 #include <QRegularExpression>
@@ -33,7 +38,13 @@
 #include <QRegularExpressionMatchIterator>
 #include <QStringBuilder>
 
+#include <boost/archive/polymorphic_iarchive.hpp>
+#include <boost/archive/polymorphic_oarchive.hpp>
+#include <boost/serialization/nvp.hpp>
+
 using namespace qe::annotation;
+using namespace boost::serialization;
+using namespace boost;
 using namespace std;
 
 namespace {
@@ -139,3 +150,37 @@ void ModelPrivate::setName(const QString& name)
 const QString & ModelPrivate::name() const noexcept
 { return m_name; }
 
+#if 1
+void ModelPrivate::save( archive::polymorphic_oarchive& oa, const unsigned int) const
+{
+	const string className { metaObject->className()};
+
+	oa & make_nvp( "name", m_name);
+	oa & make_nvp( "annotations", annotations);
+	oa & make_nvp( "metaObject", className);
+}
+
+void ModelPrivate::load( archive::polymorphic_iarchive& ia, const unsigned int)
+{
+	string className;
+
+	ia & make_nvp( "name", m_name);
+	ia & make_nvp( "annotations", annotations);
+	ia & make_nvp( "metaObject", className);
+
+	const int typeId = QMetaType::type( className.c_str());
+	metaObject = QMetaType::metaObjectForType( typeId);
+}
+
+#else
+// Explicity instantiate templates for polymorphics archivs
+template
+void ModelPrivate::serialize<archive::polymorphic_oarchive>(
+	archive::polymorphic_oarchive& oa,
+	const unsigned int);
+
+template
+void ModelPrivate::serialize<archive::polymorphic_iarchive>(
+	archive::polymorphic_iarchive& ia,
+	const unsigned int);
+#endif

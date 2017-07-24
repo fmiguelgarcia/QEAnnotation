@@ -1,5 +1,6 @@
 # Requirements 
 include( ${CMAKE_SOURCE_DIR}/tools/cmake/common.cmake)
+find_package( Boost REQUIRED COMPONENTS serialization)
 set( QEAnnotation_MAYOR_VERSION 1)
 set( QEAnnotation_MINOR_VERSION 0)
 set( QEAnnotation_BUILD_VERSION 0)
@@ -17,6 +18,7 @@ add_definitions( -DQEANNOTATION_LIB_BUILD)
 add_library( QEAnnotation SHARED ${QEAnnotation_SRCS})
 target_link_libraries( QEAnnotation 
 	Qt5::Core 
+	Boost::serialization
 	${CONAN_LIBS}) 
 
 set_target_properties( QEAnnotation

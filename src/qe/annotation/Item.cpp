@@ -26,7 +26,12 @@
  */
 #include "Item.hpp"
 
+#include <boost/serialization/string.hpp>
+#include <boost/archive/polymorphic_iarchive.hpp>
+#include <boost/archive/polymorphic_oarchive.hpp>
+
 using namespace qe::annotation;
+using namespace boost;
 using namespace std;
 
 Item::Item( const QString &key, const QVariant &value) noexcept
@@ -40,12 +45,6 @@ Item::Item( Item &&other) noexcept
 Item::Item(const Item &other) noexcept
   : m_key(other.m_key), m_value(other.m_value)
 {}
-
-#if 0
-Item::Item( ItemPrivate * dd)
-	: d_ptr(dd)
-{}
-#endif
 
 Item::~Item()
 {}
@@ -77,3 +76,13 @@ QVariant Item::value( const QVariant & defaultValue ) const noexcept
 		return defaultValue;
 	return m_value;
 }
+
+template
+void Item::serialize<archive::polymorphic_oarchive>(
+	archive::polymorphic_oarchive& oa,
+	const unsigned int);
+
+template
+void Item::serialize<archive::polymorphic_iarchive>(
+	archive::polymorphic_iarchive& oa,
+	const unsigned int);

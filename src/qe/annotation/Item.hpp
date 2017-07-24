@@ -27,17 +27,21 @@
 
 #pragma once
 #include <qe/annotation/Global.hpp>
+#include <qe/common/serialization/QVariant.hpp>
+#include <qe/common/serialization/QString.hpp>
 #include <QtGlobal>
 #include <QString>
 #include <QVariant>
 #include <QVector>
 #include <QMap>
+#include <boost/serialization/nvp.hpp>
 
 namespace qe { namespace annotation {
 
 	/// @brief It stores the key and value of an annotation.
 	class QEANNOTATION_EXPORT Item
 	{
+		friend class boost::serialization::access;
 		public:
 			/// @brief Constructor.
 			explicit Item(
@@ -75,6 +79,15 @@ namespace qe { namespace annotation {
 			/// @param defaultValue Value that will be returned if internal value is
 			/// null
 			QVariant value( const QVariant &defaultValue = QVariant()) const noexcept;
+
+			// Serialization
+			template< class Archive>
+			void serialize( Archive& ar, const unsigned int)
+			{
+				using namespace boost::serialization;
+				ar & make_nvp( "key", m_key);
+				ar & make_nvp( "value", m_value);
+			}
 
 		private:
 			QString m_key;			///< Key
