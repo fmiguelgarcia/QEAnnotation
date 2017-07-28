@@ -156,10 +156,10 @@ const QString & ModelPrivate::name() const noexcept
 template< class Archive >
 void ModelPrivate::save( Archive& oa, const unsigned int) const
 {
-	const string className = metaObject->className();
+	const QString className = QString::fromLocal8Bit( metaObject->className());
 
-	oa & make_nvp( "name", m_name);
 	oa & make_nvp( "metaObject", className);
+	oa & make_nvp( "name", m_name);
 	oa & make_nvp( "annotations", annotations);
 }
 
@@ -171,13 +171,13 @@ void ModelPrivate::save<archive::polymorphic_oarchive>(
 template< class Archive>
 void ModelPrivate::load( Archive& ia, const unsigned int)
 {
-	string className;
+	QString className;
 
 	ia & make_nvp( "name", m_name);
 	ia & make_nvp( "metaObject", className);
 	ia & make_nvp( "annotations", annotations);
 
-	const int typeId = QMetaType::type( className.c_str());
+	const int typeId = QMetaType::type( className.toLocal8Bit().constData());
 	metaObject = QMetaType::metaObjectForType( typeId);
 }
 

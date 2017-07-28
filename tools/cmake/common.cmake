@@ -13,6 +13,8 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON)
 # Enable All Warnings
 if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions( -Wall)
+	# On GCC 5 : https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html 
+	add_definitions( -Wabi-tag)
 endif()
 
 # Include common directory
