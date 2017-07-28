@@ -26,6 +26,10 @@
  */
 #include "Item.hpp"
 
+#include <qe/common/serialization/QVariant.hpp>
+#include <qe/common/serialization/QString.hpp>
+
+#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/archive/polymorphic_iarchive.hpp>
 #include <boost/archive/polymorphic_oarchive.hpp>
@@ -33,6 +37,18 @@
 using namespace qe::annotation;
 using namespace boost;
 using namespace std;
+
+BOOST_CLASS_EXPORT_IMPLEMENT( qe::annotation::Item)
+
+template< class Archive>
+void qe::annotation::Item::serialize( Archive& ar, const unsigned int)
+{
+	using namespace boost::serialization;
+	ar & make_nvp( "key", m_key);
+	ar & make_nvp( "value", m_value);
+}
+
+// BOOST_EXPORT_CLASS_IMPLEMENT( qe::annotation::Item)
 
 Item::Item( const QString &key, const QVariant &value) noexcept
   : m_key(key), m_value(value)

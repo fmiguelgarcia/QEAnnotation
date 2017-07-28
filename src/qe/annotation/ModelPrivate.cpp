@@ -30,6 +30,7 @@
 #include <qe/common/serialization/QMetaObject.hpp>
 #include <qe/common/serialization/QMap.hpp>
 #include <qe/common/serialization/QVector.hpp>
+#include <qe/common/serialization/QString.hpp>
 
 #include <QMetaObject>
 #include <QMetaClassInfo>
@@ -111,6 +112,8 @@ namespace {
 
 }
 
+BOOST_CLASS_EXPORT_IMPLEMENT( qe::annotation::ModelPrivate);
+
 ModelPrivate::ModelPrivate( const QMetaObject* meta)
 	: metaObject( meta)
 {
@@ -150,37 +153,35 @@ void ModelPrivate::setName(const QString& name)
 const QString & ModelPrivate::name() const noexcept
 { return m_name; }
 
-#if 1
-void ModelPrivate::save( archive::polymorphic_oarchive& oa, const unsigned int) const
+template< class Archive >
+void ModelPrivate::save( Archive& oa, const unsigned int) const
 {
-	const string className { metaObject->className()};
+	const string className = metaObject->className();
 
 	oa & make_nvp( "name", m_name);
-	oa & make_nvp( "annotations", annotations);
 	oa & make_nvp( "metaObject", className);
+	oa & make_nvp( "annotations", annotations);
 }
 
-void ModelPrivate::load( archive::polymorphic_iarchive& ia, const unsigned int)
+template
+void ModelPrivate::save<archive::polymorphic_oarchive>(
+	archive::polymorphic_oarchive& oa,
+	const unsigned int) const;
+
+template< class Archive>
+void ModelPrivate::load( Archive& ia, const unsigned int)
 {
 	string className;
 
 	ia & make_nvp( "name", m_name);
-	ia & make_nvp( "annotations", annotations);
 	ia & make_nvp( "metaObject", className);
+	ia & make_nvp( "annotations", annotations);
 
 	const int typeId = QMetaType::type( className.c_str());
 	metaObject = QMetaType::metaObjectForType( typeId);
 }
 
-#else
-// Explicity instantiate templates for polymorphics archivs
 template
-void ModelPrivate::serialize<archive::polymorphic_oarchive>(
-	archive::polymorphic_oarchive& oa,
-	const unsigned int);
-
-template
-void ModelPrivate::serialize<archive::polymorphic_iarchive>(
+void ModelPrivate::load<archive::polymorphic_iarchive>(
 	archive::polymorphic_iarchive& ia,
 	const unsigned int);
-#endif

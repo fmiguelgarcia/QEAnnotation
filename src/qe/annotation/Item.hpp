@@ -27,15 +27,14 @@
 
 #pragma once
 #include <qe/annotation/Global.hpp>
-#include <qe/common/serialization/QVariant.hpp>
-#include <qe/common/serialization/QString.hpp>
 #include <QtGlobal>
 #include <QString>
 #include <QVariant>
 #include <QVector>
 #include <QMap>
-#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/export.hpp>
 
+namespace boost { namespace serialization { class access; }}
 namespace qe { namespace annotation {
 
 	/// @brief It stores the key and value of an annotation.
@@ -82,18 +81,14 @@ namespace qe { namespace annotation {
 
 			// Serialization
 			template< class Archive>
-			void serialize( Archive& ar, const unsigned int)
-			{
-				using namespace boost::serialization;
-				ar & make_nvp( "key", m_key);
-				ar & make_nvp( "value", m_value);
-			}
-
+			void serialize( Archive& ar, const unsigned int);
+			
 		private:
 			QString m_key;			///< Key
 			QVariant m_value;		///< Value
 	};
-
 	using ItemList = QVector<Item>;
 	using ItemByClassInfoId = QMap<QString, ItemList>;
 }}
+
+BOOST_CLASS_EXPORT_KEY( qe::annotation::Item)
