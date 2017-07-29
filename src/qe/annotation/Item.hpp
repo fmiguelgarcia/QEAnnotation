@@ -33,6 +33,7 @@
 #include <QVector>
 #include <QMap>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/level.hpp>
 
 namespace boost { namespace serialization { class access; }}
 namespace qe { namespace annotation {
@@ -90,5 +91,5 @@ namespace qe { namespace annotation {
 	using ItemList = QVector<Item>;
 	using ItemByClassInfoId = QMap<QString, ItemList>;
 }}
-
+BOOST_CLASS_IMPLEMENTATION( qe::annotation::Item, boost::serialization::object_serializable)
 BOOST_CLASS_EXPORT_KEY( qe::annotation::Item)

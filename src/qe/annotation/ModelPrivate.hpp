@@ -33,6 +33,7 @@
 #include <QString>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/level.hpp>
 #include <vector>
 #include <map>
 
@@ -72,4 +73,5 @@ namespace qe { namespace annotation {
 	};
 }}
 
+BOOST_CLASS_IMPLEMENTATION( qe::annotation::ModelPrivate, boost::serialization::object_serializable)
 BOOST_CLASS_EXPORT_KEY( qe::annotation::ModelPrivate)
