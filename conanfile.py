@@ -10,7 +10,7 @@ class QEAnnotationConan(ConanFile):
     generators = "cmake"
     url = "https://github.com/fmiguelgarcia/QEAnnotation.git"
     description = "Annotation library in Qt Enterprise"
-    exports_sources = ["src/*", "test/*", "tools/*", "CMakeLists.txt"]
+    exports_sources = ["src/*", "test/*", "tools/*", "CMakeLists.txt", "!.*.swq"]
     options = { "qt_version": "ANY"}
 
     def configure(self):
