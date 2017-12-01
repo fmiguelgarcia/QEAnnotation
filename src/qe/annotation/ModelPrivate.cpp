@@ -42,6 +42,7 @@
 #include <boost/archive/polymorphic_iarchive.hpp>
 #include <boost/archive/polymorphic_oarchive.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/string.hpp>
 
 using namespace qe::annotation;
 using namespace boost::serialization;
@@ -156,7 +157,9 @@ const QString & ModelPrivate::name() const noexcept
 template< class Archive >
 void ModelPrivate::save( Archive& oa, const unsigned int) const
 {
-	const QString className = QString::fromLocal8Bit( metaObject->className());
+	string className;
+	if( metaObject)
+		className = metaObject->className();
 
 	oa & make_nvp( "metaObject", className);
 	oa & make_nvp( "name", m_name);
@@ -171,13 +174,13 @@ void ModelPrivate::save<archive::polymorphic_oarchive>(
 template< class Archive>
 void ModelPrivate::load( Archive& ia, const unsigned int)
 {
-	QString className;
+	string className;
 
-	ia & make_nvp( "name", m_name);
 	ia & make_nvp( "metaObject", className);
+	ia & make_nvp( "name", m_name);
 	ia & make_nvp( "annotations", annotations);
 
-	const int typeId = QMetaType::type( className.toLocal8Bit().constData());
+	const int typeId = QMetaType::type( className.c_str());
 	metaObject = QMetaType::metaObjectForType( typeId);
 }
 
