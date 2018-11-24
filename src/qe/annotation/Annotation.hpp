@@ -32,8 +32,8 @@
 #include <map>
 #include <mutex>
 
-namespace qe { namespace annotation {
-	
+namespace qe::annotation 
+{
 	/// @brief It is an utility class to register annotation models.
     class QEANNOTATION_EXPORT Annotation
 	{
@@ -56,5 +56,4 @@ namespace qe { namespace annotation {
 	template <class T>
 	Model Annotation::registerModel()
 	{ return registerModel( &T::staticMetaObject);}
-
-}}
+}

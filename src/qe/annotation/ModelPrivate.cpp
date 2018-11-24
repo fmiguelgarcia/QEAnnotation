@@ -26,11 +26,11 @@
  */
 
 #include "ModelPrivate.hpp"
-#include <qe/common/serialization/QVariant.hpp>
-#include <qe/common/serialization/QMetaObject.hpp>
-#include <qe/common/serialization/QMap.hpp>
-#include <qe/common/serialization/QVector.hpp>
-#include <qe/common/serialization/QString.hpp>
+#include <qe/core/serialization/QVariant.hpp>
+#include <qe/core/serialization/QMetaObject.hpp>
+#include <qe/core/serialization/QMap.hpp>
+#include <qe/core/serialization/QVector.hpp>
+#include <qe/core/serialization/QString.hpp>
 
 #include <QMetaObject>
 #include <QMetaClassInfo>
@@ -72,17 +72,17 @@ namespace {
 	{
 		ItemList annotationItems;
 
-		QRegularExpression assignExp( annotateAssignExpression());
+		static QRegularExpression assignExp( annotateAssignExpression());
 		QRegularExpressionMatchIterator matchItr = assignExp.globalMatch( annotations);
 		while ( matchItr.hasNext())
 		{
-			QRegularExpressionMatch match = matchItr.next();
-			QString key = match.captured( QStringLiteral("key"));
-			QString value = match.captured( QStringLiteral("valueOneWord"));
+			const QRegularExpressionMatch match = matchItr.next();
+			const QString key = match.captured( QStringLiteral("key"));
+			auto value = match.capturedRef( QStringLiteral("valueOneWord"));
 			if ( value.isEmpty())
-				value = match.captured( QStringLiteral("valueMultiWords"));
+				value = match.capturedRef( QStringLiteral("valueMultiWords"));
 
-			annotationItems.push_back( Item(key, value));
+			annotationItems.push_back( Item(key, value.toString()));
 		}
 
 		return annotationItems;

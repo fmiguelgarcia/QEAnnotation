@@ -30,7 +30,8 @@
 #include <QExplicitlySharedDataPointer>
 #include <QMetaObject>
 
-namespace qe { namespace annotation {
+namespace qe::annotation 
+{
 	class ModelPrivate;
 
 	class QEANNOTATION_EXPORT Model
@@ -68,6 +69,6 @@ namespace qe { namespace annotation {
 
 			Q_DECLARE_PRIVATE( Model);
 	};
-}}
-	
+}
+
 Q_DECLARE_TYPEINFO( qe::annotation::Model, Q_MOVABLE_TYPE);

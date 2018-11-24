@@ -37,8 +37,8 @@
 #include <vector>
 #include <map>
 
-namespace qe { namespace annotation {
-
+namespace qe::annotation 
+{
 	class QEANNOTATION_EXPORT ModelPrivate : public QSharedData
 	{
 		public:
@@ -71,7 +71,7 @@ namespace qe { namespace annotation {
 		private:
 			QString m_name;						///< Model name.
 	};
-}}
+}
 
 BOOST_CLASS_IMPLEMENTATION( qe::annotation::ModelPrivate, boost::serialization::object_serializable)
 BOOST_CLASS_EXPORT_KEY( qe::annotation::ModelPrivate)

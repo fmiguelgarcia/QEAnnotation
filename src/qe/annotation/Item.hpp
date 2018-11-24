@@ -9,7 +9,7 @@
  * Licensees holding valid commercial QE licenses may use this file in
  * accordance with the commercial license agreement provided with the
  * Software or, alternatively, in accordance with the terms contained in
- * a written agreement between you and The Dmious Company. For licensing terms
+ * a written agreement between you and The Dmious Company. For licensing terms 
  * and conditions see http://www.dmious.com/qe/terms-conditions. For further
  * information use the contact form at http://www.dmious.com/contact-us.
  *
@@ -27,17 +27,20 @@
 
 #pragma once
 #include <qe/annotation/Global.hpp>
+
 #include <QtGlobal>
 #include <QString>
 #include <QVariant>
 #include <QVector>
 #include <QMap>
+
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/level.hpp>
 
-namespace boost { namespace serialization { class access; }}
-namespace qe { namespace annotation {
+namespace boost::serialization { class access; }
 
+namespace qe::annotation 
+{
 	/// @brief It stores the key and value of an annotation.
 	class QEANNOTATION_EXPORT Item
 	{
@@ -90,6 +93,7 @@ namespace qe { namespace annotation {
 	};
 	using ItemList = QVector<Item>;
 	using ItemByClassInfoId = QMap<QString, ItemList>;
-}}
+}
+
 BOOST_CLASS_IMPLEMENTATION( qe::annotation::Item, boost::serialization::object_serializable)
 BOOST_CLASS_EXPORT_KEY( qe::annotation::Item)

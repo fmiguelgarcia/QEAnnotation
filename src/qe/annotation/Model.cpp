@@ -50,11 +50,11 @@ Model::Model(const Model &other) noexcept
 {}
 
 Model::Model(Model &&other) noexcept
-  : d_ptr( std::move(other.d_ptr))
+  : d_ptr( qMove(other.d_ptr))
 {}
 
 Model::Model( QExplicitlySharedDataPointer<ModelPrivate>&& dd) noexcept
-	: d_ptr( std::move(dd))
+	: d_ptr( qMove(dd))
 {}
 
 Model::Model( const QExplicitlySharedDataPointer<ModelPrivate>& dd) noexcept
@@ -72,7 +72,7 @@ Model &Model::operator=(const Model &other) noexcept
 
 Model &Model::operator=( Model &&other) noexcept
 {
-	d_ptr = std::move( other.d_ptr);
+	d_ptr = qMove( other.d_ptr);
 	return *this;
 }
 

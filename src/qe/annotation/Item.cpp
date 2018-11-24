@@ -26,8 +26,8 @@
  */
 #include "Item.hpp"
 
-#include <qe/common/serialization/QVariant.hpp>
-#include <qe/common/serialization/QString.hpp>
+#include <qe/core/serialization/QVariant.hpp>
+#include <qe/core/serialization/QString.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/string.hpp>
@@ -55,7 +55,7 @@ Item::Item( const QString &key, const QVariant &value) noexcept
 {}
 
 Item::Item( Item &&other) noexcept
-  : m_key( move(other.m_key)), m_value( move(other.m_value))
+  : m_key( qMove(other.m_key)), m_value( qMove(other.m_value))
 {}
 
 Item::Item(const Item &other) noexcept
@@ -69,8 +69,8 @@ Item &Item::operator=(const Item &other) = default;
 
 Item &Item::operator=(Item &&other)
 {
-	m_key = std::move( other.m_key);
-	m_value = std::move( other.m_value);
+	m_key = qMove( other.m_key);
+	m_value = qMove( other.m_value);
 	return *this;
 }
 
