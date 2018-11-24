@@ -1,22 +1,19 @@
-from conans import ConanFile, CMake 
-import os
+from conans import  tools, CMake, python_requires 
 
-class QEAnnotationConan(ConanFile):
+base = python_requires( 'QEConanFile/1.0.0@dmious/stable')
+
+class QEAnnotationConan(base.QEConanFile):
     name = "QEAnnotation"
-    version = "1.0.0"
-    requires = "QECommon/1.0.0@fmiguelgarcia/stable"
+    version = base.QEConanFile.version_from_file( 
+        'src/qe/annotation/CMakeLists.txt',
+        r"set\( QEAnnotation_VERSION (.*)\)")
+    requires = "QECore/0.1.0@dmious/stable"
     settings = "os", "compiler", "build_type", "arch"
     license = "https://www.gnu.org/licenses/lgpl-3.0-standalone.html"
     generators = "cmake"
     url = "https://github.com/fmiguelgarcia/QEAnnotation.git"
     description = "Annotation library in Qt Enterprise"
     exports_sources = ["src/*", "test/*", "tools/*", "CMakeLists.txt", "!.*.swq"]
-    options = { "qt_version": "ANY"}
-
-    def configure(self):
-        self.options.qt_version = os.popen("qmake -query QT_VERSION").read().strip()
-        self.output.info("Configure Qt Version: %s" % self.options.qt_version)
-
 
     def build(self):
         cmake = CMake( self)
@@ -29,7 +26,7 @@ class QEAnnotationConan(ConanFile):
         self.copy( pattern="LICENSE.LGPLv3", dst="share/qe/annotation")
         self.copy( pattern="libQEAnnotation.so*", dst="lib",
                 src="src/qe/annotation", links=True)
-        if self.settings.os == "Windows":
+        if tools.os_info.is_windows: 
             libNames = ["QEAnnotation", "libQEAnnotation"]
             libExts = [".dll", ".lib", ".dll.a", ".pdb"]
             for libName in libNames:
